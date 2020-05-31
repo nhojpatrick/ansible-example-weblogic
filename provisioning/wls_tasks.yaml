@@ -7,7 +7,7 @@
 - name: JDK Installer - Fail if missing
   fail:
     msg: Missing  JDK Installer at {{ jdk_rpm }}
-  when: jdk_rpm_chk.stat.exists == False
+  when: not jdk_rpm_chk.stat.exists
 
 - name: JDK Installer - Install
   become: true
@@ -29,15 +29,15 @@
   fail:
     msg: Missing  JDK Installer at {{ jdk_rpm }}
   when:
-    - wls_zip_chk.stat.exists == False
-    - wls_jar_chk.stat.exists == False
+    - not wls_zip_chk.stat.exists
+    - not wls_jar_chk.stat.exists
 
 - name: WLS Zip - Convert weblogic has installed (zip containing the jar)
   archive:
     path: "{{ wls_jar }}"
     dest: "{{ wls_zip }}"
     format: zip
-  when: wls_zip_chk.stat.exists == False
+  when: not wls_zip_chk.stat.exists
 
 - name: Ensure weblogic installed
   include_role:
